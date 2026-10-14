@@ -426,3 +426,10 @@ FodyWeavers.xsd
 
 # Official VS Code C# Dev Kit Extension exclusion
 #*.lscache
+
+# Simulation outputs
+*.vcd
+*_sim
+*.vvp
+obj_dir/
+single-cycle-rv32i-plan.md
