@@ -433,3 +433,10 @@ FodyWeavers.xsd
 *.vvp
 obj_dir/
 single-cycle-rv32i-plan.md
+
+# Simulation outputs
+build/
+*.vcd
+.vscode/tasks.json
+.gitignore
+sim.ps1

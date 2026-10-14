@@ -17,7 +17,7 @@ module alu_tb;
     endtask
 
     initial begin
-        $dumpfile("alu.vcd");
+        $dumpfile("alu_tb.vcd");
         $dumpvars(0, alu_tb);
 
         // ADD
