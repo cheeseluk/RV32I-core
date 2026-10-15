@@ -16,7 +16,7 @@ module imem_tb;
     };
 
     // sim.ps1 runs the simulation from build/, so the path is relative to that.
-    imem #(.DEPTH(DEPTH), .INIT("../imem_tb.hex")) dut (.addr(addr), .instr(instr));
+    imem #(.DEPTH(DEPTH), .INIT("../tb/imem_tb.hex")) dut (.addr(addr), .instr(instr));
 
     // Reads are combinational: set the address, wait a moment, check.
     task automatic check(input logic [31:0] t_addr, expected_instr, input string name);

@@ -7,7 +7,7 @@ module regfile_tb;
     logic [31:0] model [0:31];   // expected register contents
     int errors = 0;
 
-    regs dut (.clk(clk), .we(we), .reset(reset), .a1(a1), .a2(a2), .a3(a3),
+    regfile dut (.clk(clk), .we(we), .reset(reset), .a1(a1), .a2(a2), .a3(a3),
               .wd(wd), .rd1(rd1), .rd2(rd2));
 
     always #5 clk = ~clk;

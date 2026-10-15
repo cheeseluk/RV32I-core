@@ -5,7 +5,8 @@ module imem #(parameter int DEPTH = 1024,
 
             logic [31:0] mem [0:DEPTH-1]; 
             
-            initial $readmemh(INIT, mem);
+            // INIT = "" leaves the memory empty so a testbench can load it instead.
+            initial if (INIT != "") $readmemh(INIT, mem);
             assign instr = mem[addr[$clog2(DEPTH) + 1:2]]; //assigning instr to mem[addr]
 
 endmodule

@@ -1,5 +1,5 @@
 `default_nettype none 
-module regs (input logic clk, we, reset, 
+module regfile (input logic clk, we, reset, 
             input logic [4:0] a1,  a2,  a3,
             logic [31:0] wd,
             output logic [31:0] rd1, rd2);

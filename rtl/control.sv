@@ -2,7 +2,7 @@
 module control import riscv_pkg::*; (
     input  logic [31:0] inst,
     output logic        reg_write,
-    output logic [3:0]  alu_op,      // full ALU operation (alu_dec merged in)
+    output alu_op_e     alu_op,      // full ALU operation (alu_dec merged in)
     output logic        alu_src_a,   // 0 = rs1, 1 = pc        (AUIPC)
     output logic        alu_src_b,   // 0 = rs2, 1 = imm
     output logic        mem_write,   // store; LSU makes the byte enables
@@ -10,16 +10,19 @@ module control import riscv_pkg::*; (
     output logic        branch,      // B-type
     output logic        jump,        // JAL
     output logic        jalr,        // JALR
-    output logic        halt         // ecall, break
+    output logic        halt,        // ecall, ebreak
+    output logic        illegal      // opcode not in RV32I
     );
 
 
     logic [6:0] opcode;
+    logic [2:0] funct3;
     assign opcode = inst[6:0];
+    assign funct3 = inst[14:12];
 
     always_comb begin
         reg_write = 0;
-        alu_op = 0;
+        alu_op = ALU_ADD;
         alu_src_a = 0;
         alu_src_b = 0;
         mem_write = 0;
@@ -28,10 +31,11 @@ module control import riscv_pkg::*; (
         jump = 0;
         jalr = 0;
         halt = 0;
+        illegal = 0;
 
         case (opcode)
 
-            OP_LOAD: begin 
+            OP_LOAD: begin              // address = rs1 + imm
                 result_src = 2'b01;
                 reg_write = 1;
                 alu_src_b = 1;
@@ -39,55 +43,61 @@ module control import riscv_pkg::*; (
 
             OP_REG: begin
                 reg_write = 1;
-                alu_op = {inst[30], inst[14:12]}; // the ALU has it's decoder built in
+                alu_op = alu_op_e'({inst[30], funct3}); // the ALU has it's decoder built in
             end
 
-            OP_STORE: begin
-                alu_src_b = 0;
+            OP_STORE: begin             // address = rs1 + imm
+                alu_src_b = 1;
                 mem_write = 1;
             end
 
-            OP_BRANCH: begin
+            OP_BRANCH: begin            // branch_unit compares, not the ALU
                 branch = 1;
             end
 
             OP_IMM: begin
-                alu_op = {(inst[14:12] == 3'b101) & inst[30], inst[14:12]};
+                // inst[30] is part of the immediate except for srai
+                alu_op = alu_op_e'({(funct3 == 3'b101) & inst[30], funct3});
                 reg_write = 1;
                 alu_src_b = 1;
             end
 
-            OP_JAL: begin
+            OP_JAL: begin               // target = pc + imm, computed in the datapath
                 result_src = 2'b10;
-                alu_src_b = 1;
                 reg_write = 1;
                 jump = 1;
             end
 
-            OP_JALR: begin
+            OP_JALR: begin              // target = (rs1 + imm) & ~1, from the ALU
                 result_src = 2'b10;
                 alu_src_b = 1;
                 reg_write = 1;
                 jalr = 1;
             end
 
-            OP_AUIPC: begin
+            OP_LUI: begin               // rd = imm
+                reg_write = 1;
+                alu_src_b = 1;
+                alu_op = ALU_PASS_B;
+            end
+
+            OP_AUIPC: begin             // rd = pc + imm
                 reg_write = 1;
                 alu_src_a = 1;
                 alu_src_b = 1;
             end
 
             OP_FENCE: ; //nothing
-            
+
             OP_SYSTEM: begin
-                if (inst[14:12] == 3'b000 && inst[20] == 1'b0)
+                if (funct3 == 3'b000)   // ecall and ebreak; anything else is a CSR op
                     halt = 1;
+                else
+                    illegal = 1;
             end
+
+            default: illegal = 1;
         endcase
+    end
 
-endmodule 
-
-
-
-
-
+endmodule
