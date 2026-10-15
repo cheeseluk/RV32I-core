@@ -10,7 +10,7 @@ module regs (input logic clk, we, reset,
 
             if (reset)
                 for (int i = 0; i < 32; i++) x[i] <= '0;
-            else if (we & (|a3 != 0)) //write enable and a3 is not 5'b0
+            else if (we & (|a3)) //write enable and a3 is not 5'b0
                 x[a3] <= wd;
 
         end
@@ -20,3 +20,5 @@ module regs (input logic clk, we, reset,
 
 
 endmodule
+
+`default_nettype wire

@@ -440,3 +440,4 @@ build/
 .vscode/tasks.json
 .gitignore
 sim.ps1
+.vscode/settings.json

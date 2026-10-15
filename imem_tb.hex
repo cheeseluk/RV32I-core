@@ -1,0 +1,17 @@
+// Contents for imem_tb: 16 words, one per line, word 0 first.
+00500093 // addi x1, x0, 5
+00700113 // addi x2, x0, 7
+002081b3 // add  x3, x1, x2
+40208233 // sub  x4, x1, x2
+a5a50004 // filler: each value is different, so a wrong index gives the wrong word
+a5a50005
+a5a50006
+a5a50007
+a5a50008
+a5a50009
+a5a5000a
+a5a5000b
+a5a5000c
+a5a5000d
+a5a5000e
+deadbeef // last word (index 15)
