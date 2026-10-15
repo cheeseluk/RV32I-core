@@ -1,6 +1,6 @@
 `default_nettype none
 module control import riscv_pkg::*; (
-    input  logic [31:0] inst,
+    input wire logic [31:0] inst,
     output logic        reg_write,
     output alu_op_e     alu_op,      // full ALU operation (alu_dec merged in)
     output logic        alu_src_a,   // 0 = rs1, 1 = pc        (AUIPC)
@@ -101,3 +101,5 @@ module control import riscv_pkg::*; (
     end
 
 endmodule
+
+`default_nettype wire

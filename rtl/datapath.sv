@@ -1,23 +1,23 @@
 `default_nettype none
 
 module datapath import riscv_pkg::*; (
-    input logic clk, reset,
+    input wire logic clk, reset,
     // inst memory
-    input logic [31:0] inst,
+    input wire logic [31:0] inst,
     output logic [31:0] pc,
     // control
-    input logic reg_write,
-    input alu_op_e alu_op,
-    input logic alu_src_a, alu_src_b,
-    input logic mem_write,
-    input logic [1:0] result_src,
-    input logic branch, jump, jalr,
-    input logic halt,
+    input wire logic reg_write,
+    input wire alu_op_e alu_op,
+    input wire logic alu_src_a, alu_src_b,
+    input wire logic mem_write,
+    input wire logic [1:0] result_src,
+    input wire logic branch, jump, jalr,
+    input wire logic halt,
     // data memory
     output logic [31:0] alu_result,  // also the data address
     output logic [31:0] write_data,  // in byte lanes
     output logic [3:0]  byte_en,
-    input  logic [31:0] read_data
+    input wire logic [31:0] read_data
     
 );
 
@@ -84,3 +84,5 @@ module datapath import riscv_pkg::*; (
     
 endmodule
 
+
+`default_nettype wire

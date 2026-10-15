@@ -1,9 +1,11 @@
 # Startup code for C programs on the core.
 # Sets up the stack, zeroes .bss, calls main, and reports main's return
 # value the same way riscv-tests do: gp = 1 on PASS (main returned 0), or
-# (n << 1) | 1 for FAIL #n, then ecall halts the core.
+# (n << 1) | 1 for FAIL #n. It stores gp to RESULT_ADDR, where core_tb stops
+# and the FPGA board shows it, then ecall halts the core.
 
 #define STACK_TOP 0x4000         // top of the 16 KB dmem (core_tb MEM_WORDS)
+#define RESULT_ADDR 0x100
 
     .section .text.init
     .globl _start
@@ -24,4 +26,5 @@ _start:
     beqz a0, 3f
     slli gp, a0, 1
     ori  gp, gp, 1
-3:  ecall
+3:  sw   gp, RESULT_ADDR(zero)
+    ecall

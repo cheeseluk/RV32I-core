@@ -1,6 +1,6 @@
 module imem #(parameter int DEPTH = 1024, 
-            parameter string INIT = "prog.hex"
-            )(input logic [31:0] addr, 
+            parameter INIT = "prog.hex"   // untyped: iverilog can't pass a string parameter into a string parameter
+            )(input logic [31:0] addr,
             output logic [31:0] instr);
 
             logic [31:0] mem [0:DEPTH-1]; 

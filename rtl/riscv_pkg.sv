@@ -54,3 +54,5 @@ package riscv_pkg;
     localparam logic [2:0] F3_HU = 3'b101; // lhu
 
 endpackage
+
+`default_nettype wire

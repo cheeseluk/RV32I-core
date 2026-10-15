@@ -1,7 +1,7 @@
 `default_nettype none 
-module regfile (input logic clk, we, reset, 
-            input logic [4:0] a1,  a2,  a3,
-            logic [31:0] wd,
+module regfile (input wire logic clk, we, reset, 
+            input wire logic [4:0] a1,  a2,  a3,
+            input wire logic [31:0] wd,
             output logic [31:0] rd1, rd2);
 
         logic [31:0] x [0:31]; //declare register

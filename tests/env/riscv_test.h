@@ -2,9 +2,10 @@
 //
 // It replaces riscv-tests' env/p/riscv_test.h, whose startup code uses CSR
 // instructions this core doesn't have. Here the program just starts at
-// _start (address 0). RVTEST_PASS / RVTEST_FAIL are kept as they are:
-// they set gp (x3) to 1 on pass, or (test_number << 1) | 1 on fail, then
-// ecall, which halts the core.
+// _start (address 0). RVTEST_PASS / RVTEST_FAIL set gp (x3) to 1 on pass,
+// or (test_number << 1) | 1 on fail, as before. They also store gp to
+// 0x100, the result address core_tb and the FPGA board watch, then ecall,
+// which halts the core.
 
 #ifndef _ENV_RV32I_CORE_H
 #define _ENV_RV32I_CORE_H
@@ -32,6 +33,7 @@ _start:                                                                 \
 #define RVTEST_PASS                                                     \
         fence;                                                          \
         li TESTNUM, 1;                                                  \
+        sw TESTNUM, 0x100(zero);                                        \
         li a7, 93;                                                      \
         li a0, 0;                                                       \
         ecall
@@ -41,6 +43,7 @@ _start:                                                                 \
 1:      beqz TESTNUM, 1b;                                               \
         sll TESTNUM, TESTNUM, 1;                                        \
         or TESTNUM, TESTNUM, 1;                                         \
+        sw TESTNUM, 0x100(zero);                                        \
         li a7, 93;                                                      \
         addi a0, TESTNUM, 0;                                            \
         ecall

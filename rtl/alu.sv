@@ -1,8 +1,8 @@
 `default_nettype none
 module alu
     import riscv_pkg::*;
-   (input  logic [31:0] a, b,
-    input  alu_op_e     op,
+   (input wire logic [31:0] a, b,
+    input wire alu_op_e     op,
     output logic [31:0] y);
 
     always_comb begin
@@ -23,3 +23,5 @@ module alu
     end
 endmodule
 
+
+`default_nettype wire
