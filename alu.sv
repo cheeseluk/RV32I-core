@@ -17,6 +17,7 @@ module alu
             ALU_SRA:  y = $signed(a) >>> b[4:0];
             ALU_OR:   y = a | b;
             ALU_AND:  y = a & b;
+            ALU_PASS_B: y = b;
             default:  y = '0;
         endcase
     end
